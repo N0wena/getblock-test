@@ -1,0 +1,11 @@
+.gb-text {
+  &-weight {
+    &--normal {
+      font-weight: var(--font-weight-normal);
+    }
+
+    &--bold {
+      font-weight: var(--font-weight-bold);
+    }
+  }
+}

@@ -1,0 +1,90 @@
+:root {
+  // colors
+  --color-white: #FFFFFF;
+  --color-black: #282828;
+  --color-blue-light: #11B3FE;
+  --color-blue-dark: #0095E0;
+  --color-gray-main: #80A2B6;
+  --color-gray-separator: #E3EBEF;
+  --color-gray-background: #F6F7F8;
+  --color-gray-border: #C1D9E6;
+  --color-gray-select: #EAF1F7;
+  --color-red: #E03F3F;
+
+  // fonts
+  --font-size-normal: 16px;
+  --font-size-subtitle: 20px;
+  --font-size-title-desktop: 50px;
+  --font-size-title-mobile: 40px;
+  
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  --letter-spacing: 0.03em;
+
+  // borders
+  --border-radius: 5px;
+}
+
+@mixin offset($prefix, $fieldFirst, $fieldLast: "") {
+  .ao-#{$prefix}-auto {
+    #{$fieldFirst}: auto;
+
+    @if $fieldLast != "" {
+      #{$fieldLast}: auto;
+    }
+  }
+
+  @for $i from 1 through 32 {
+    $val: $i * 2;
+
+    .ao-#{$prefix}-#{$val} {
+      #{$fieldFirst}: #{$val}px;
+
+      @if $fieldLast != "" {
+        #{$fieldLast}: #{$val}px;
+      }
+    }
+  }
+}
+
+
+@mixin offset($prefix, $fieldFirst, $fieldLast: "") {
+  .gb-#{$prefix}-auto {
+    #{$fieldFirst}: auto;
+
+    @if $fieldLast != "" {
+      #{$fieldLast}: auto;
+    }
+  }
+
+  @for $i from 1 through 32 {
+    $val: $i * 2;
+
+    .gb-#{$prefix}-#{$val} {
+      #{$fieldFirst}: #{$val}px;
+
+      @if $fieldLast != "" {
+        #{$fieldLast}: #{$val}px;
+      }
+    }
+  }
+}
+
+// Margins
+@include offset(ma, margin);
+@include offset(mx, margin-right, margin-left);
+@include offset(my, margin-bottom, margin-top);
+@include offset(mt, margin-top);
+@include offset(mb, margin-bottom);
+@include offset(mr, margin-right);
+@include offset(ml, margin-left);
+
+// Padding
+@include offset(pa, padding);
+@include offset(px, padding-right, padding-left);
+@include offset(py, padding-bottom, padding-top);
+@include offset(pt, padding-top);
+@include offset(pb, padding-bottom);
+@include offset(pr, padding-right);
+@include offset(pl, padding-left);
