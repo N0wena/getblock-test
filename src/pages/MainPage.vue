@@ -7,18 +7,12 @@
       Exchange fast and easy
     </h2>
 
-    <gb-search
-      :class="{ hide: !isOpen1 }"
-      v-model="firstValue"
-      :options="options"
-    />
     <div class="main-page-changer">
       <gb-input
         class="main-page-value-first"
         :value="firstValue"
         :currency="firstCurrency"
-        @click="isOpen1 = !isOpen1"
-        v-click-outside="toggle1"
+        :options="options"
       />
       <gb-icon
         class="main-page-swap"
@@ -29,7 +23,7 @@
         class="main-page-value-second"
         :value="secondValue"
         :currency="secondCurrency"
-        @click="isOpen2 = !isOpen2"
+        :options="options"
       />
     </div>
 
@@ -54,21 +48,14 @@
 <script>
 import { mapState } from 'vuex';
 import store from '@/store';
-import ClickOutside from '@/directives/ClickOutside';
 
 export default {
   name: 'MainPage',
 
   store,
 
-  directives: {
-    'click-outside': ClickOutside,
-  },
-
   data() {
     return {
-      isOpen1: false,
-      isOpen2: false,
       windowWidth: window.innerWidth,
       firstValue: 0,
       firstCurrency: 'BTC',
@@ -97,10 +84,6 @@ export default {
   methods: {
     onResize() {
       this.windowHeight = window.innerHeight;
-    },
-
-    toggle1() {
-      this.isOpen1 = false;
     },
   },
 
@@ -185,10 +168,6 @@ export default {
     @media (max-width: 576px) {
       flex-direction: column;
     }
-  }
-
-  .hide {
-    display: none;
   }
 }
 </style>

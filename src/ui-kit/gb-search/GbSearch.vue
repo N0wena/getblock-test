@@ -1,16 +1,33 @@
 <template>
   <div
-    class="custom-select"
+    class="gb-search"
     :tabindex="tabindex"
   >
-    <input class="selected open">
-    <div class="items">
+    <div class="gb-search-content">
+      <input
+        class="gb-search-input"
+        placeholder="Search"
+      >
+      <gb-icon
+        class="gb-search-icon gb-ml-30"
+        name="cross"
+        @click="$emit('close')"
+      />
+    </div>
+    <div class="gb-search-items">
       <div
+        class="gb-search-item"
         v-for="(option, i) of options"
         :key="i"
         @click="onClick(option)"
       >
-        {{ option }}
+        <img :src="option.image" />
+        <div class="gb-ml-12">
+          {{ option.ticker }}
+        </div>
+        <div class="gb-ml-16 gb-text-color--gray">
+          {{ option.name }}
+        </div>
       </div>
     </div>
   </div>
@@ -60,63 +77,82 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.custom-select {
+.gb-search {
   position: relative;
-  width: 100%;
-  text-align: left;
+  width: 440px;
+  height: 50px;
+  flex-shrink: 0;
+  background: var(--color-gray-background);
+  border: 1px solid var(--color-gray-border);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
   outline: none;
-  height: 47px;
-  line-height: 47px;
-}
 
-.custom-select .selected {
-  background-color: #0a0a0a;
-  border-radius: 6px;
-  border: 1px solid #666666;
-  color: #fff;
-  padding-left: 1em;
-  cursor: pointer;
-  user-select: none;
-}
+  @media (max-width: 576px) {
+    width: auto;
+  }
 
-.custom-select .selected.open {
-  border: 1px solid #ad8225;
-  border-radius: 6px 6px 0px 0px;
-}
+  &-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-.custom-select .selected:after {
-  position: absolute;
-  content: "";
-  top: 22px;
-  right: 1em;
-  width: 0;
-  height: 0;
-  border: 5px solid transparent;
-  border-color: #fff transparent transparent transparent;
-}
+  &-input {
+    -webkit-appearance: none;
+    flex-grow: 1;
+    background-color: transparent;
+    border: none;
+  }
 
-.custom-select .items {
-  color: #fff;
-  border-radius: 0px 0px 6px 6px;
-  overflow: hidden;
-  border-right: 1px solid #ad8225;
-  border-left: 1px solid #ad8225;
-  border-bottom: 1px solid #ad8225;
-  position: absolute;
-  background-color: #0a0a0a;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
+  input:focus, textarea:focus, select:focus{
+    outline: none;
+  }
 
-.custom-select .items div {
-  color: #fff;
-  padding-left: 1em;
-  cursor: pointer;
-  user-select: none;
-}
+  .gb-search-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
 
-.custom-select .items div:hover {
-  background-color: #ad8225;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .gb-search-items {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    z-index: 1;
+    border-top: 1px solid var(--color-gray-separator);
+    border-left: 1px solid var(--color-gray-border);
+    border-right: 1px solid var(--color-gray-border);
+    border-bottom: 1px solid var(--color-gray-border);
+  }
+
+  .gb-search-item {
+    padding-left: 16px;
+    width: 438px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    background: var(--color-gray-background);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+
+    @media (max-width: 576px) {
+      width: auto;
+    }
+
+    &:hover {
+      background-color: var(--color-gray-select);
+    }
+  }
 }
 </style>

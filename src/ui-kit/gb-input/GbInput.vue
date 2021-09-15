@@ -1,5 +1,8 @@
 <template>
-  <div class="gb-input">
+  <div
+    class="gb-input"
+    v-click-outside="onClose"
+  >
     <input
       placeholder="Введите значение"
       :value="value"
@@ -16,22 +19,38 @@
       {{ currency }}
     </div>
     <gb-icon
-      :class="{ active: isActive }"
+      :class="{ active: isOpen }"
       class="gb-input-icon gb-ml-30"
       name="arrow_down"
       color="gray"
-      @click="onClick()"
+      @click="toggleSearch()"
     />
+
+    <div
+      class="gb-input-search"
+      :class="{ hide: !isOpen }"
+    >
+      <gb-search
+        :options="options"
+        @close="onClose()"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import ClickOutside from '@/directives/ClickOutside';
+
 export default {
   name: 'GbInput',
 
+  directives: {
+    'click-outside': ClickOutside,
+  },
+
   data() {
     return {
-      isActive: false,
+      isOpen: false,
     };
   },
 
@@ -39,6 +58,11 @@ export default {
     value: {
       type: [String, Number],
       default: '',
+    },
+
+    options: {
+      type: Array,
+      default: () => ([]),
     },
 
     currency: {
@@ -54,9 +78,12 @@ export default {
   },
 
   methods: {
-    onClick() {
-      this.isActive = !this.isActive;
-      this.$emit('click');
+    toggleSearch() {
+      this.isOpen = !this.isOpen;
+    },
+
+    onClose() {
+      this.isOpen = false;
     },
   },
 };
@@ -64,6 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 .gb-input {
+  position: relative;
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -108,8 +136,20 @@ export default {
     }
   }
 
+  &-search {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+  }
+
   .active {
     transform: rotate(180deg);
+  }
+
+  .hide {
+    display: none;
   }
 }
 </style>
