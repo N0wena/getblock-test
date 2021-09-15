@@ -10,8 +10,6 @@
     <div class="main-page-changer">
       <gb-input
         class="main-page-value-first"
-        :value="firstValue"
-        :currency="firstCurrency"
         :options="options"
       />
       <gb-icon
@@ -21,8 +19,6 @@
       />
       <gb-input
         class="main-page-value-second"
-        :value="secondValue"
-        :currency="secondCurrency"
         :options="options"
       />
     </div>

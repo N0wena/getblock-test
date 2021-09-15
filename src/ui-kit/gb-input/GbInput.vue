@@ -4,20 +4,21 @@
     v-click-outside="onClose"
   >
     <input
-      placeholder="Введите значение"
+      placeholder="Выберите валюту"
       :value="value"
       @input="$emit('input', value)"
       class="gb-input-value"
     >
-    <div class="gb-input-separator" />
-    <gb-icon
-      class="gb-input-icon gb-ml-34"
-      :name="icon"
-      color="blue"
-    />
-    <div class="gb-input-currency gb-ml-12">
-      {{ currency }}
-    </div>
+    <template v-if="!isCurrencyEmpty">
+      <div class="gb-input-separator" />
+      <img
+        class="gb-ml-34"
+        :src="currency.image"
+      />
+      <div class="gb-input-currency gb-ml-12">
+        {{ ticker }}
+      </div>
+    </template>
     <gb-icon
       :class="{ active: isOpen }"
       class="gb-input-icon gb-ml-30"
@@ -31,6 +32,7 @@
       :class="{ hide: !isOpen }"
     >
       <gb-search
+        v-model="currency"
         :options="options"
         @close="onClose()"
       />
@@ -50,6 +52,7 @@ export default {
 
   data() {
     return {
+      currency: {},
       isOpen: false,
     };
   },
@@ -64,16 +67,15 @@ export default {
       type: Array,
       default: () => ([]),
     },
-
-    currency: {
-      type: String,
-      default: '',
-    },
   },
 
   computed: {
-    icon() {
-      return this.currency.toLowerCase();
+    ticker() {
+      return this.currency.ticker?.toUpperCase();
+    },
+
+    isCurrencyEmpty() {
+      return (Object.keys(this.currency).length === 0) && (this.currency.constructor === Object);
     },
   },
 

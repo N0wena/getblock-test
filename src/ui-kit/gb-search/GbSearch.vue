@@ -40,13 +40,11 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true,
       default: () => ([]),
     },
 
     value: {
-      type: [Number, String],
-      required: false,
+      type: [Number, String, Object],
       default: null,
     },
 
@@ -58,7 +56,7 @@ export default {
 
   data() {
     return {
-      selected: '',
+      selected: {},
     };
   },
 
