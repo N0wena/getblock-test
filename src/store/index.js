@@ -11,6 +11,7 @@ export default new Vuex.Store({
     options: [],
     minimalExchange: 0,
     estimatedValue: 0,
+    apiError: false,
   },
   mutations: {
     updateProperty(state, { name, value }) {
@@ -22,24 +23,53 @@ export default new Vuex.Store({
       const url = `${env}/currencies?active=true&fixedRate=true?`;
 
       fetch(url)
-        .then((response) => response.json())
-        .then((result) => commit('updateProperty', { name: 'options', value: result }));
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log(response.status);
+            return;
+          }
+          response.json();
+        })
+        .then((result) => commit('updateProperty', { name: 'options', value: result }))
+        .catch((err) => {
+          console.log('Fetch Error :-S', err);
+        });
     },
 
     getMinimalExchangeAmount({ commit }, params = {}) {
       const url = `${env}/min-amount/${params.fromTo}?api_key=${key}`;
 
       fetch(url)
-        .then((response) => response.json())
-        .then((result) => commit('updateProperty', { name: 'minimalExchange', value: result.minAmount }));
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log(response.status);
+            return;
+          }
+          response.json();
+        })
+        .then((result) => commit('updateProperty', { name: 'minimalExchange', value: result.minAmount }))
+        .catch((err) => {
+          console.log('Fetch Error :-S', err);
+          commit('updateProperty', { name: 'apiError', value: true });
+        });
     },
 
     getEstimatedExchangeAmount({ commit }, params = {}) {
       const url = `${env}/exchange-amount/${params.sendAmount}/${params.fromTo}?api_key=${key}`;
 
       fetch(url)
-        .then((response) => response.json())
-        .then((result) => commit('updateProperty', { name: 'estimatedValue', value: result.estimatedAmount }));
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log(response.status);
+            return;
+          }
+          response.json();
+        })
+        .then((result) => commit('updateProperty', { name: 'estimatedValue', value: result.estimatedAmount }))
+        .catch((err) => {
+          console.log('Fetch Error :-S', err);
+          commit('updateProperty', { name: 'apiError', value: true });
+        });
     },
   },
 });

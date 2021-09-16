@@ -72,11 +72,12 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      options: 'options',
-      minimalExchange: 'minimalExchange',
-      estimatedValue: 'estimatedValue',
-    }),
+    ...mapState([
+      'options',
+      'minimalExchange',
+      'estimatedValue',
+      'apiError',
+    ]),
 
     pair() {
       let pair = '';
@@ -101,7 +102,7 @@ export default {
     },
 
     unValid() {
-      return +this.leftValue < this.minimalExchange;
+      return (+this.leftValue < this.minimalExchange) || this.apiError;
     },
 
     validRightValue() {
