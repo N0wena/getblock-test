@@ -10,7 +10,6 @@
     <div class="main-page-changer">
       <gb-input
         v-model="leftValue"
-        class="main-page-value-left"
         :options="options"
         :placeholder="emptyLeftCurrency ? 'Выберите значение' : 'Введите значение...'"
         type="number"
@@ -23,11 +22,9 @@
         color="gray"
       />
       <gb-input
-        v-model="rightValue"
-        class="main-page-value-right"
+        v-model="validRightValue"
         :options="options"
         :placeholder="emptyRightCurrency ? 'Выберите значение' : 'Введите значение...'"
-        type="number"
         disabled
         @blur="getEstimate()"
         @change="onRightChange($event)"
@@ -45,6 +42,7 @@
         />
         <gb-button
           :class="windowWidth > 576 ? '' : 'gb-mt-8'"
+          :is-error="unValid"
           text="exchange"
         />
       </div>
@@ -99,6 +97,14 @@ export default {
       return (
         Object.keys(this.rightCurrency).length === 0) && (this.rightCurrency.constructor === Object
       );
+    },
+
+    unValid() {
+      return +this.leftValue < this.minimalExchange;
+    },
+
+    validRightValue() {
+      return this.unValid ? '-' : this.rightValue;
     },
   },
 
@@ -212,24 +218,8 @@ export default {
     }
   }
 
-  &-value-first {
-    margin-right: 29px;
-
-    @media (max-width: 576px) {
-      margin-right: 0;
-    }
-  }
-
-  &-value-second {
-    margin-left: 27px;
-
-    @media (max-width: 576px) {
-      margin-left: 0;
-    }
-  }
-
   &-swap {
-    margin: 0;
+    margin: 0 27px 0 29px;
     padding-bottom: 2px;
     cursor: pointer;
     transition: opacity 0.3s;
