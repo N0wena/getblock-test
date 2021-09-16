@@ -44,6 +44,7 @@
           :class="windowWidth > 576 ? '' : 'gb-mt-8'"
           :is-error="unValid"
           text="exchange"
+          @click="send()"
         />
       </div>
     </div>
@@ -160,7 +161,7 @@ export default {
       }
     },
 
-    async onRightChange(e) {
+    onRightChange(e) {
       this.rightCurrency = e;
 
       if (this.pair) {
@@ -170,6 +171,10 @@ export default {
           this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
         }, 1000);
       }
+    },
+
+    send() {
+      console.log('Запрос отправлен');
     },
   },
 
