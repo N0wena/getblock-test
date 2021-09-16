@@ -28,7 +28,9 @@ export default new Vuex.Store({
             console.log(response.status);
             return;
           }
-          response.json();
+
+          // eslint-disable-next-line
+          return response.json();
         })
         .then((result) => commit('updateProperty', { name: 'options', value: result }))
         .catch((err) => {
@@ -45,7 +47,9 @@ export default new Vuex.Store({
             console.log(response.status);
             return;
           }
-          response.json();
+
+          // eslint-disable-next-line
+          return response.json();
         })
         .then((result) => commit('updateProperty', { name: 'minimalExchange', value: result.minAmount }))
         .catch((err) => {
@@ -63,7 +67,9 @@ export default new Vuex.Store({
             console.log(response.status);
             return;
           }
-          response.json();
+
+          // eslint-disable-next-line
+          return response.json();
         })
         .then((result) => commit('updateProperty', { name: 'estimatedValue', value: result.estimatedAmount }))
         .catch((err) => {

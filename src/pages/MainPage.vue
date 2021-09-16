@@ -150,27 +150,21 @@ export default {
       this.windowHeight = window.innerHeight;
     },
 
-    onLeftChange(e) {
+    async onLeftChange(e) {
       this.leftCurrency = e;
 
       if (this.pair) {
-        this.getMinimalExchangeAmount({ fromTo: this.pair });
-
-        setTimeout(() => {
-          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
-        }, 1000);
+        await this.getMinimalExchangeAmount({ fromTo: this.pair });
+        await this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
       }
     },
 
-    onRightChange(e) {
+    async onRightChange(e) {
       this.rightCurrency = e;
 
       if (this.pair) {
-        this.getMinimalExchangeAmount({ fromTo: this.pair });
-
-        setTimeout(() => {
-          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
-        }, 1000);
+        await this.getMinimalExchangeAmount({ fromTo: this.pair });
+        await this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
       }
     },
 
