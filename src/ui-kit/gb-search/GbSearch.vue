@@ -123,11 +123,27 @@ export default {
     left: -1px;
     right: -1px;
     z-index: 1;
+    max-height: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
     border-top: 1px solid var(--color-gray-separator);
     border-left: 1px solid var(--color-gray-border);
     border-right: 1px solid var(--color-gray-border);
     border-bottom: 1px solid var(--color-gray-border);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
+
+      &::-webkit-scrollbar {
+        width: 10px;
+        background-color: var(--color-blue-dark);
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: var(--color-gray-separator);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      }
   }
 
   .gb-search-item {

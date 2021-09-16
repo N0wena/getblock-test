@@ -155,7 +155,9 @@ export default {
 
       if (this.pair) {
         await this.getMinimalExchangeAmount({ fromTo: this.pair });
-        await this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        setTimeout(() => {
+          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        }, 300);
       }
     },
 
@@ -164,7 +166,9 @@ export default {
 
       if (this.pair) {
         await this.getMinimalExchangeAmount({ fromTo: this.pair });
-        await this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        setTimeout(() => {
+          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        }, 300);
       }
     },
 
