@@ -9,8 +9,13 @@
 
     <div class="main-page-changer">
       <gb-input
-        class="main-page-value-first"
+        v-model="leftValue"
+        class="main-page-value-left"
         :options="options"
+        :placeholder="emptyLeftCurrency ? 'Выберите значение' : 'Введите значение...'"
+        type="number"
+        @blur="getEstimate()"
+        @change="onLeftChange($event)"
       />
       <gb-icon
         class="main-page-swap"
@@ -18,8 +23,14 @@
         color="gray"
       />
       <gb-input
-        class="main-page-value-second"
+        v-model="rightValue"
+        class="main-page-value-right"
         :options="options"
+        :placeholder="emptyRightCurrency ? 'Выберите значение' : 'Введите значение...'"
+        type="number"
+        disabled
+        @blur="getEstimate()"
+        @change="onRightChange($event)"
       />
     </div>
 
@@ -42,7 +53,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import store from '@/store';
 
 export default {
@@ -53,10 +64,10 @@ export default {
   data() {
     return {
       windowWidth: window.innerWidth,
-      firstValue: 0,
-      firstCurrency: 'BTC',
-      secondValue: 0,
-      secondCurrency: 'ETH',
+      leftValue: null,
+      leftCurrency: {},
+      rightValue: null,
+      rightCurrency: {},
       address: '',
     };
   },
@@ -64,7 +75,31 @@ export default {
   computed: {
     ...mapState({
       options: 'options',
+      minimalExchange: 'minimalExchange',
+      estimatedValue: 'estimatedValue',
     }),
+
+    pair() {
+      let pair = '';
+
+      if (this.leftCurrency.ticker && this.rightCurrency.ticker) {
+        pair = `${this.leftCurrency.ticker}_${this.rightCurrency.ticker}`;
+      }
+
+      return pair;
+    },
+
+    emptyLeftCurrency() {
+      return (
+        Object.keys(this.leftCurrency).length === 0) && (this.leftCurrency.constructor === Object
+      );
+    },
+
+    emptyRightCurrency() {
+      return (
+        Object.keys(this.rightCurrency).length === 0) && (this.rightCurrency.constructor === Object
+      );
+    },
   },
 
   created() {
@@ -77,9 +112,58 @@ export default {
     });
   },
 
+  watch: {
+    minimalExchange: {
+      handler() {
+        this.leftValue = this.minimalExchange;
+      },
+    },
+
+    estimatedValue: {
+      handler() {
+        this.rightValue = this.estimatedValue;
+      },
+    },
+  },
+
   methods: {
+    ...mapActions([
+      'getMinimalExchangeAmount',
+      'getEstimatedExchangeAmount',
+    ]),
+
+    getEstimate() {
+      if (this.pair) {
+        this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+      }
+    },
+
     onResize() {
       this.windowHeight = window.innerHeight;
+    },
+
+    onLeftChange(e) {
+      this.leftCurrency = e;
+
+      if (this.pair) {
+        this.getMinimalExchangeAmount({ fromTo: this.pair });
+
+        setTimeout(() => {
+          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        }, 1000);
+      }
+    },
+
+    async onRightChange(e) {
+      this.rightCurrency = e;
+
+      if (this.pair) {
+        this.getMinimalExchangeAmount({ fromTo: this.pair });
+
+        setTimeout(() => {
+          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        }, 1000);
+      }
     },
   },
 
@@ -147,6 +231,12 @@ export default {
   &-swap {
     margin: 0;
     padding-bottom: 2px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.7,
+    }
 
     @media (max-width: 576px) {
       margin: 16px 0 16px auto;

@@ -4,10 +4,13 @@
     v-click-outside="onClose"
   >
     <input
-      placeholder="Выберите валюту"
+      :placeholder="placeholder"
       :value="value"
-      @input="$emit('input', value)"
-      class="gb-input-value"
+      :type="type"
+      :disabled="disabled"
+      @input="$emit('input', $event.target.value)"
+      @blur="$emit('blur')"
+      class="gb-input-value gb-pr-16"
     >
     <template v-if="!isCurrencyEmpty">
       <div class="gb-input-separator" />
@@ -32,8 +35,10 @@
       :class="{ hide: !isOpen }"
     >
       <gb-search
-        v-model="currency"
-        :options="options"
+        v-model="search"
+        :options="filteredOptions"
+        placeholder="Search"
+        @change="onChange($event)"
         @close="onClose()"
       />
     </div>
@@ -53,6 +58,7 @@ export default {
   data() {
     return {
       currency: {},
+      search: '',
       isOpen: false,
     };
   },
@@ -67,6 +73,21 @@ export default {
       type: Array,
       default: () => ([]),
     },
+
+    placeholder: {
+      type: [String, Number],
+      default: '',
+    },
+
+    type: {
+      type: String,
+      default: '',
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -77,6 +98,18 @@ export default {
     isCurrencyEmpty() {
       return (Object.keys(this.currency).length === 0) && (this.currency.constructor === Object);
     },
+
+    filteredOptions() {
+      return this.options.filter((e) => e.name.toLowerCase().includes(this.search.toLowerCase()));
+    },
+  },
+
+  watch: {
+    isOpen: {
+      handler() {
+        this.search = '';
+      },
+    },
   },
 
   methods: {
@@ -86,6 +119,11 @@ export default {
 
     onClose() {
       this.isOpen = false;
+    },
+
+    onChange(e) {
+      this.currency = e;
+      this.$emit('change', e);
     },
   },
 };
@@ -111,13 +149,24 @@ export default {
 
   &-value {
     -webkit-appearance: none;
-    flex-grow: 1;
+    width: 100%;
     border: none;
     background-color: transparent;
   }
 
   input:focus, textarea:focus, select:focus{
     outline: none;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none;
+      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
+
+  input[type=number] {
+      -moz-appearance:textfield; /* Firefox */
   }
 
   &-separator {

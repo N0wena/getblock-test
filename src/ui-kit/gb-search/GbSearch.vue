@@ -6,7 +6,9 @@
     <div class="gb-search-content">
       <input
         class="gb-search-input"
-        placeholder="Search"
+        :placeholder="placeholder"
+        :value="value"
+        @input="$emit('input', $event.target.value)"
       >
       <gb-icon
         class="gb-search-icon gb-ml-30"
@@ -52,22 +54,16 @@ export default {
       type: Number,
       default: 0,
     },
-  },
 
-  data() {
-    return {
-      selected: {},
-    };
-  },
-
-  mounted() {
-    this.$emit('input', this.selected);
+    placeholder: {
+      type: [String, Number],
+      default: '',
+    },
   },
 
   methods: {
     onClick(e) {
-      this.selected = e;
-      this.$emit('input', e);
+      this.$emit('change', e);
       this.$emit('close');
     },
   },
@@ -131,6 +127,7 @@ export default {
     border-left: 1px solid var(--color-gray-border);
     border-right: 1px solid var(--color-gray-border);
     border-bottom: 1px solid var(--color-gray-border);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
 
   .gb-search-item {
