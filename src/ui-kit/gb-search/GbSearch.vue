@@ -132,18 +132,18 @@ export default {
     border-bottom: 1px solid var(--color-gray-border);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
 
-      &::-webkit-scrollbar {
-        width: 10px;
-        background-color: var(--color-blue-dark);
-      }
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: var(--color-blue-dark);
+    }
 
-      &::-webkit-scrollbar-track {
-        background-color: var(--color-gray-separator);
-      }
+    &::-webkit-scrollbar-track {
+      background-color: var(--color-gray-separator);
+    }
 
-      &::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-      }
+    &::-webkit-scrollbar-thumb {
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
   }
 
   .gb-search-item {
