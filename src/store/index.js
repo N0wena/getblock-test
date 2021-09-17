@@ -9,8 +9,6 @@ const env = 'https://api.changenow.io/v1';
 export default new Vuex.Store({
   state: {
     options: [],
-    minimalExchange: 0,
-    estimatedValue: 0,
     apiError: false,
   },
   mutations: {
@@ -38,10 +36,10 @@ export default new Vuex.Store({
         });
     },
 
-    getMinimalExchangeAmount({ commit }, params = {}) {
+    async getMinimalExchangeAmount({ commit }, params = {}) {
       const url = `${env}/min-amount/${params.fromTo}?api_key=${key}`;
 
-      fetch(url)
+      const res = await fetch(url)
         .then((response) => {
           if (response.status !== 200) {
             console.log(response.status);
@@ -51,17 +49,19 @@ export default new Vuex.Store({
           // eslint-disable-next-line
           return response.json();
         })
-        .then((result) => commit('updateProperty', { name: 'minimalExchange', value: result.minAmount }))
+        .then((result) => result.minAmount)
         .catch((err) => {
           console.log('Fetch Error :-S', err);
           commit('updateProperty', { name: 'apiError', value: true });
         });
+
+      return res;
     },
 
-    getEstimatedExchangeAmount({ commit }, params = {}) {
+    async getEstimatedExchangeAmount({ commit }, params = {}) {
       const url = `${env}/exchange-amount/${params.sendAmount}/${params.fromTo}?api_key=${key}`;
 
-      fetch(url)
+      const res = await fetch(url)
         .then((response) => {
           if (response.status !== 200) {
             console.log(response.status);
@@ -71,11 +71,13 @@ export default new Vuex.Store({
           // eslint-disable-next-line
           return response.json();
         })
-        .then((result) => commit('updateProperty', { name: 'estimatedValue', value: result.estimatedAmount }))
+        .then((result) => result.estimatedAmount)
         .catch((err) => {
           console.log('Fetch Error :-S', err);
           commit('updateProperty', { name: 'apiError', value: true });
         });
+
+      return res;
     },
   },
 });

@@ -67,6 +67,8 @@ export default {
       leftCurrency: {},
       rightValue: null,
       rightCurrency: {},
+      minimalExchange: 0,
+      estimatedValue: 0,
       address: '',
     };
   },
@@ -74,8 +76,6 @@ export default {
   computed: {
     ...mapState([
       'options',
-      'minimalExchange',
-      'estimatedValue',
       'apiError',
     ]),
 
@@ -121,12 +121,6 @@ export default {
   },
 
   watch: {
-    minimalExchange: {
-      handler() {
-        this.leftValue = this.minimalExchange;
-      },
-    },
-
     estimatedValue: {
       handler() {
         this.rightValue = this.estimatedValue;
@@ -154,9 +148,10 @@ export default {
       this.leftCurrency = e;
 
       if (this.pair) {
-        await this.getMinimalExchangeAmount({ fromTo: this.pair });
-        this.$nextTick(() => {
-          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        this.minimalExchange = await this.getMinimalExchangeAmount({ fromTo: this.pair });
+        this.leftValue = this.minimalExchange;
+        this.estimatedValue = await this.getEstimatedExchangeAmount({
+          fromTo: this.pair, sendAmount: this.leftValue,
         });
       }
     },
@@ -165,9 +160,10 @@ export default {
       this.rightCurrency = e;
 
       if (this.pair) {
-        await this.getMinimalExchangeAmount({ fromTo: this.pair });
-        this.$nextTick(() => {
-          this.getEstimatedExchangeAmount({ fromTo: this.pair, sendAmount: this.leftValue });
+        this.minimalExchange = await this.getMinimalExchangeAmount({ fromTo: this.pair });
+        this.leftValue = this.minimalExchange;
+        this.estimatedValue = await this.getEstimatedExchangeAmount({
+          fromTo: this.pair, sendAmount: this.leftValue,
         });
       }
     },
