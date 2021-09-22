@@ -126,6 +126,15 @@ export default {
         this.rightValue = this.estimatedValue;
       },
     },
+
+    leftValue: {
+      async handler() {
+        console.log('start');
+        this.rightValue = await this.getEstimatedExchangeAmount({
+          fromTo: this.pair, sendAmount: this.leftValue,
+        });
+      },
+    },
   },
 
   methods: {
